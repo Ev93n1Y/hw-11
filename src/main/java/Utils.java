@@ -1,9 +1,8 @@
-public static class Utils{
-    public static ArrayList<String> createNamesList(String names...){
-        private ArrayList<String> namesList = new ArrayList<>;
-        for(String name : names){
-            namesList.add(name);
-        }
-        return namesList;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class Utils{
+    public static ArrayList<String> createNamesList(String ...names){
+        return new ArrayList<>(Arrays.asList(names));
     }
 }
