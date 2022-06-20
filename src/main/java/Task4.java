@@ -16,9 +16,9 @@ public class Task4 {
         int c = 11;
         Long m = (long) Math.pow(2, 48);
         //System.out.println(new LinerCongruentGenerator().generate(a, c, m, seed));
-        Stream.iterate(seed, i -> i=generator.generate(a, c, m, i))
+        Stream.iterate(seed, i -> i=generator
+                        .generate(a, c, m, i))
                         .forEach(System.out::println);
-        //System.out.println(generateValue);
     }
 
 }
