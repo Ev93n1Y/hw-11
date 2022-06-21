@@ -1,33 +1,58 @@
-/*
+/*Задание 5#
  * Напишите метод public static <T> Stream<T> zip(Stream<T> first, Stream<T> second)
  *  который "перемешивает" элементы из стримов first и second, останавливается тогда,
  *  когда у одного из стримов закончатся элементы.
- *
- * Dima Aushev
-  1 д. назад
-Привіт. Як.я це розумію, це простий шафл
-12345 -> 42513
-
-якщо точно, поки не залишаться елементи у якомусь зі стрімів, а не у масиві.
-умова не дуже зрозуміла, тому її ще можна трактувати ще так
-first -> abcd
-second -> ABCDEFG
-result ->aAbBcCdD (отредактировано)
-
  * */
 
-import java.util.stream.IntStream;
+import java.util.*;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Task5 {
     public static void main(String[] args) {
+        Stream<String> streamLower = Stream.of("a", "b", "c", "d", "e", "f");
+        Stream<String> streamUpper = Stream.of("A", "B", "C", "D", "E", "F", "G", "H");
 
-    }
-    public static <T> Stream<T> zip(Stream<T> first, Stream<T> second){
-        return IntStream
-                .range(0, Math.min(first.size(), second.size()))
-                .mapToObj(i -> first.get(i) + second.get(i))
-                .forEach(System.out::println);
+        Stream<String> zippedStream = StreamSupport
+                .stream(new ZipIterator<>(streamLower, streamUpper).spliterator(), false);
+        zippedStream.forEach(System.out::print);
     }
 
+
+    static class ZipIterator<T> implements Iterator<T>, Iterable<T> {
+        Iterator<T> iterator1;
+        Iterator<T> iterator2;
+        boolean even = true;
+
+        @Override
+        public Iterator<T> iterator() {
+            return this;
+        }
+
+        public ZipIterator(Stream<T> first, Stream<T> second) {
+            iterator1 = first.iterator();
+            iterator2 = second.iterator();
+        }
+
+        public boolean hasNext() {
+            return iterator1.hasNext() && iterator2.hasNext();
+        }
+
+        @Override
+        public T next() {
+            return (hasNext() && even)
+                    ? addEven()
+                    : addOdd();
+        }
+
+        public T addEven() {
+            even = false;
+            return iterator1.next();
+        }
+
+        public T addOdd() {
+            even = true;
+            return iterator2.next();
+        }
+    }
 }
