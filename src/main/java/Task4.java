@@ -10,22 +10,33 @@ import java.util.stream.Stream;
  */
 public class Task4 {
     public static void main(String[] args) {
-        LinerCongruentGenerator generator = new LinerCongruentGenerator();
-        Long seed = 3446L;
-        Long a  = 25214903917L;
-        int c = 11;
-        Long m = (long) Math.pow(2, 48);
-        //System.out.println(new LinerCongruentGenerator().generate(a, c, m, seed));
-        Stream.iterate(seed, i -> i=generator
-                        .generate(a, c, m, i))
-                        .forEach(System.out::println);
+        LCGenerator generator = new LCGenerator(3446L, 25214903917L, 11, (long) Math.pow(2, 48));
+        generator
+                .randomStream()
+                .forEach(System.out::println);
     }
 
 }
 
-class LinerCongruentGenerator {
-    public Long generate(Long a, int c, Long m, Long seed) {
-        return (a * seed + c)%m;
-        //return 1 * (a * seed + c)%m;
+class LCGenerator {
+    Long seed;
+    Long a;
+    int c;
+    Long m;
+
+    public LCGenerator(Long seed, Long a, int c, Long m) {
+        this.seed = seed;
+        this.a = a;
+        this.c = c;
+        this.m = m;
+    }
+
+    public Long generate(Long seed) {
+        return (a * seed + c) % m;
+    }
+
+    public Stream<Long> randomStream() {
+        return Stream.iterate(seed, i -> i = generate(i));
     }
 }
+
